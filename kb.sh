@@ -1,14 +1,12 @@
 #!/usr/bin/env sh
 
-TXT=kb.txt
-TBL=mpq/rez/stat_txt.tbl
-YML=../Starcraft/cosmonarchy.yml
-SED=kb.sed
-TMP=kb.tmp
-MPQ=temp.mpq
-#declare old new xline yline
-
 main() {
+	local TXT=kb.txt
+	local TBL=mpq/rez/stat_txt.tbl
+	local YML=../Starcraft/cosmonarchy.yml
+	local SED=kb.sed
+	local TMP=kb.tmp
+	local MPQ=temp.mpq
 	if [ ! -f "$TXT" ]
 	then
 		grid true
@@ -26,6 +24,7 @@ main() {
 }
 
 grid() {
+	local old new
 	old=false
 	new=${1:-true}
 	$new || old=true
@@ -71,13 +70,13 @@ apply_sedfile() {
 }
 
 patch_mpq() {
+	local xline yline
 	if grep -qsbm1 . "$MPQ" 2>/dev/null
 	then
 		echo 'Search Method: Grep'
 		xline=$(head -c 30 "$TBL")
 		xline=$(grep -Fobam1 "$xline" "$MPQ"|cut -d: -f1)
 	else
-		#TODO: Security check with head -n2
 		echo 'Search Method: Strings'
 		xline=$(strings -t d -n 50 "$TBL" | head -n1 | sed 's/^ *//')
 		yline=$(echo "$xline"|cut -d' ' -f2-)
@@ -89,4 +88,4 @@ patch_mpq() {
 	dd if="$TMP" of="$MPQ" bs=1 seek="$xline" conv=notrunc 2>/dev/null
 }
 
-main "@"
+main "$@"
