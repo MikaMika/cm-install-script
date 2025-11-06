@@ -1,12 +1,12 @@
 #!/usr/bin/env sh
 
 main() {
-	local TXT=kb.txt
-	local TBL=mpq/rez/stat_txt.tbl
-	local YML=../Starcraft/cosmonarchy.yml
-	local SED=kb.sed
-	local TMP=kb.tmp
-	local MPQ=temp.mpq
+	TXT=kb.txt
+	TBL=mpq/rez/stat_txt.tbl
+	YML=../Starcraft/cosmonarchy.yml
+	SED=kb.sed
+	TMP=kb.tmp
+	MPQ=temp.mpq
 	if [ ! -f "$TXT" ]
 	then
 		grid true
@@ -24,7 +24,6 @@ main() {
 }
 
 grid() {
-	local old new
 	old=false
 	new=${1:-true}
 	$new || old=true
@@ -70,18 +69,17 @@ apply_sedfile() {
 }
 
 patch_mpq() {
-	local xline yline
 	if grep -qsbm1 . "$MPQ" 2>/dev/null
 	then
 		echo 'Search Method: Grep'
 		xline=$(head -c 30 "$TBL")
-		xline=$(grep -Fobam1 "$xline" "$MPQ"|cut -d: -f1)
+		xline=$(grep -Fobam1 "$xline" "$MPQ" | cut -d: -f1)
 	else
 		echo 'Search Method: Strings'
 		xline=$(strings -t d -n 50 "$TBL" | head -n1 | sed 's/^ *//')
-		yline=$(echo "$xline"|cut -d' ' -f2-)
+		yline=$(echo "$xline" | cut -d' ' -f2-)
 		yline=$(strings -t d -n 50 "$MPQ" | grep -Fm1 "$yline" | sed 's/^ *\([0-9]*\) .*/\1/')
-		xline=$(echo "$xline"|cut -d' ' -f1)
+		xline=$(echo "$xline" | cut -d' ' -f1)
 		xline=$((yline-xline))
 	fi
 	echo 'Patching...'
