@@ -1,30 +1,27 @@
 #!/usr/bin/env sh
 
-MPQ=temp.mpq
-TBL=mpq/rez/stat_txt.tbl
 TXT=kb.txt
+TBL=mpq/rez/stat_txt.tbl
 YML=../Starcraft/cosmonarchy.yml
 SED=kb.sed
 TMP=kb.tmp
-#old
-#new
-#xline
-#yline
+MPQ=temp.mpq
+#declare old new xline yline
 
 main() {
 	if [ ! -f "$TXT" ]
 	then
 		grid true
 		export_config < "$TBL" > "$TXT"
-		echo " Created new custom keybinds: '$TXT'"
-		echo " Open that file with a text editor and modify the first character"
-		echo "then launch this script again to import the keys into the game."
+		echo "Created new custom keybinds: '$TXT'"
+		echo "Open that file with a text editor and modify the first character"
+		echo " then launch this script again to import the keys into the game."
 	else
 		grid false
 		import_config
-		echo " If you see any error, try launching the script again."
-		echo " If you want to re-enable Grid and/or start over, then"
-		echo "delete '$TXT' and launch this script again."
+		echo "If you see any error, try launching the script again."
+		echo "If you want to re-enable Grid and/or start over, then"
+		echo " delete '$TXT' and launch this script again."
 	fi
 }
 
@@ -82,9 +79,9 @@ patch_mpq() {
 	else
 		#TODO: Security check with head -n2
 		echo 'Search Method: Strings'
-		xline=$(strings -t d "$TBL" | head -n1 | sed 's/^ *//')
+		xline=$(strings -t d -n 50 "$TBL" | head -n1 | sed 's/^ *//')
 		yline=$(echo "$xline"|cut -d' ' -f2-)
-		yline=$(strings -t d "$MPQ" | grep "$yline" -m1 | sed 's/^ *\([0-9]*\) .*/\1/')
+		yline=$(strings -t d -n 50 "$MPQ" | grep -Fm1 "$yline" | sed 's/^ *\([0-9]*\) .*/\1/')
 		xline=$(echo "$xline"|cut -d' ' -f1)
 		xline=$((yline-xline))
 	fi

@@ -1,2 +1,2 @@
-@.\busybox64u.exe time ash .\kb.sh
+@busybox64u.exe sh kb.sh
 @pause
