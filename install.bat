@@ -20,6 +20,7 @@ echo.
 echo :: Setting up Cosmonarchy
 .\tar xf cm.zip
 move cosmonarchy-bw-prerelease-* Prerelease
+if not exist %SystemRoot%\Fonts\lucon.ttf (copy lucon.ttf %SystemRoot%\Fonts)
 echo.
 echo :: Setting up Brood War
 .\tar xf bw.zip
@@ -38,7 +39,6 @@ copy ..\CrownLink.snp .
 copy ..\msvcp140.dll .
 copy ..\fixpath.bat .
 cd ..\Prerelease
-if not exist %SystemRoot%\Fonts\lucon.ttf (copy lucon.ttf %SystemRoot%\Fonts)
 echo.
 echo :: Video Settings
 "..\Starcraft\cnc-ddraw config"
