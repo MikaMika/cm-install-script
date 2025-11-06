@@ -11,41 +11,47 @@ if not exist tar.exe       (echo tar is missing. This is a requirement for this 
 if not exist cm.zip        (echo cm    & .\curl -Lo cm.zip   "https://gitlab.com/the-no-frauds-club/cosmonarchy-bw-prerelease/-/archive/main/cosmonarchy-bw-prerelease-main.zip")
 if not exist maps.zip      (echo maps  & .\curl -Lo maps.zip "https://gitlab.com/the-no-frauds-club/cmbw-root/-/archive/main/cmbw-root-main.zip")
 if not exist bw.zip        (echo bw    & .\curl -Lo bw.zip   "https://fraudsclub.com/files/starcraft.zip")
-if not exist msvcp140.dll  (echo msvc  & .\curl -LO          "https://mikamika.top/cm/dl/msvcp140.dll")
-if not exist lucon.ttf     (echo lucon & .\curl -LO          "https://mikamika.top/cm/dl/lucon.ttf")
-if not exist fixpath.bat   (echo path  & .\curl -LO          "https://mikamika.top/cm/dl/fixpath.bat")
+if not exist msvcp140.dll  (echo msvc  & .\curl -LO          "https://github.com/MikaMika/cm-install-script/raw/refs/heads/main/msvcp140.dll")
+if not exist lucon.ttf     (echo lucon & .\curl -LO          "https://github.com/MikaMika/cm-install-script/raw/refs/heads/main/lucon.ttf")
+if not exist fixpath.bat   (echo path  & .\curl -LO          "https://github.com/MikaMika/cm-install-script/raw/refs/heads/main/fixpath.bat")
 if not exist cnc-ddraw.zip (echo ddraw & .\curl -LO          "https://github.com/FunkyFr3sh/cnc-ddraw/releases/download/v7.0.0.0/cnc-ddraw.zip")
-if not exist CrownLink.snp (echo cl    & .\curl -LO          "https://github.com/impromptu1583/CrownLink/releases/latest/download/CrownLink.snp")
+if not exist CrownLink.snp (echo crlnk & .\curl -LO          "https://github.com/impromptu1583/CrownLink/releases/latest/download/CrownLink.snp")
 echo.
 echo :: Setting up Cosmonarchy
 .\tar xf cm.zip
-move cosmonarchy-bw-* cm
-for %%a in (cm\*) do move /y "%%~fa" .
-for /d %%a in (cm\*) do move /y "%%~fa" .
-rd cm
+move cosmonarchy-bw-prerelease-* Prerelease
 echo.
 echo :: Setting up Brood War
 .\tar xf bw.zip
-move Starcraft sc
-for %%a in (sc\*) do move /y "%%~fa" .
-for /d %%a in (sc\*) do move /y "%%~fa" .
-rd sc
+cd Starcraft
 reg add "HKLM\Software\Wow6432Node\Blizzard Entertainment\Starcraft" /V "Program" /D "%CD%\StarCraft.exe" /F
 echo.
 echo :: Setting up Maps
-.\tar xf maps.zip
+..\tar xf ..\maps.zip
 md maps
 move cmbw-root* maps\cmbw-root
 echo.
 echo :: Setting up misc
-.\tar xf cnc-ddraw.zip
+..\tar xf ..\cnc-ddraw.zip
 reg add "HKCU\Software\Wine\DllOverrides" /V "ddraw" /D "native,builtin" /F
+copy ..\CrownLink.snp .
+copy ..\msvcp140.dll .
+copy ..\fixpath.bat .
+cd ..\Prerelease
 if not exist %SystemRoot%\Fonts\lucon.ttf (copy lucon.ttf %SystemRoot%\Fonts)
 echo.
 echo :: Video Settings
-"cnc-ddraw config"
+"..\Starcraft\cnc-ddraw config"
 echo.
 echo :: Creating data file...
 echo :: Please wait...
 "Cosmonarchy BW"
-del bw.zip cm.zip maps.zip cnc-ddraw.zip
+echo.
+echo ::
+echo ::
+echo :: You may now delete the downloaded files,
+echo :: or keep them for an offline reinstallation.
+echo ::
+echo ::
+echo.
+pause
