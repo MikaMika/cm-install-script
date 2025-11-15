@@ -10,8 +10,8 @@ main() {
 	MPQ=temp.mpq
 	if [ ! -f "$TXT" ]
 	then
+		grid true
 		{
-			grid true
 			echo "# Config file for Cosmonarchy KeyBinder"
 			echo "# "
 			echo "# Lines starting with # are ignored."
